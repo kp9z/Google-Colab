@@ -1,8 +1,12 @@
+import datetime
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
 import urllib.request
 import os
+import tensorflow as tf
+import datatime
 
 def plot_loss_curve(model_history):
     """
@@ -56,6 +60,20 @@ def walk_dir(root):
     """
     for root,dirs, files in os.walk(root):
       print(f'There are {len(dirs)} directories & {(len(files))} files in {root}')
+
+
+def create_tensorboard_callback(experiement_name,log_dir = 'tensor_board' ):
+    """
+    Create a TensorBoard callback
+    :param log_dir: directory which log will be save
+    :param experiement_name: (str) experiment name
+    :return: a TensorFlow TensorBoard callback
+    """
+    current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir_full_path = log_dir+"/" + experiement_name+"/"+current_time
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir_full_path)
+    print(f'Saving log to {log_dir_full_path}')
+    return tensorboard_callback
 
 
 
