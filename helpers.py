@@ -6,7 +6,7 @@ import zipfile
 import urllib.request
 import os
 import tensorflow as tf
-import datatime
+import datetime
 
 def plot_loss_curve(model_history):
     """
