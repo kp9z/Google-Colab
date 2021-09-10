@@ -1,5 +1,3 @@
-import datetime
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
@@ -75,5 +73,27 @@ def create_tensorboard_callback(experiement_name,log_dir = 'tensor_board' ):
     print(f'Saving log to {log_dir_full_path}')
     return tensorboard_callback
 
+def combine_2_historys(history1,history2):
+  """
+  Combine 2 tensorflow history & display them
+  """
+  df1 = pd.DataFrame(history1.history)
+  df2 = pd.DataFrame(history2.history)
 
+  df = pd.concat([df1,df2],ignore_index=True)
+
+  x = range(len(df))
+  plt.figure(figsize = (10,7))
+  plt.subplot(211)
+  plt.plot(x,df.loss,label = 'loss')
+  plt.plot(x,df.val_loss,label = 'val_loss')
+  plt.vlines(len(df1)-1,0,max(df.loss))
+  plt.legend()
+
+  plt.subplot(212)
+  plt.plot(x,df.accuracy,label = 'accuracy')
+  plt.plot(x,df.val_accuracy,label = 'val_accuracy')
+  plt.vlines(len(df1)-1,0,max(df.accuracy))
+
+  plt.legend()
 
