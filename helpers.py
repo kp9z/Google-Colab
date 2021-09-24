@@ -5,6 +5,7 @@ import urllib.request
 import os
 import tensorflow as tf
 import datetime
+import time
 
 def plot_loss_curve(model_history):
     """
@@ -94,6 +95,9 @@ def combine_2_historys(history1,history2):
   plt.plot(x,df.accuracy,label = 'accuracy')
   plt.plot(x,df.val_accuracy,label = 'val_accuracy')
   plt.vlines(len(df1)-1,0,max(df.accuracy))
-
   plt.legend()
+
+def keep_colab_awake(duration = 10):
+    while True:
+        time.sleep(duration)
 
