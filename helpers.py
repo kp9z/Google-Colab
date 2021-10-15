@@ -101,3 +101,42 @@ def keep_colab_awake(duration = 10):
     while True:
         time.sleep(duration)
 
+
+import numpy as np
+
+
+def prepare_data(text, line_number_depth=13, total_lines_depth=18):
+    """
+    Function to prepare data into dataset, that's ready to be fed to a model
+    """
+    X = np.array([sentence.replace('\n', '').strip().lower() for sentence in text.split('.') if sentence])
+    X_chars = np.array([" ".join(list(sentence)) for sentence in X])
+
+    line_number = [*range(len(X))]
+    total_lines = [len(X) - 1 for count in range(len(X))]
+
+    line_number_one_hot = np.array(tf.one_hot(line_number, depth=line_number_depth))
+    total_lines_one_hot = np.array(tf.one_hot(total_lines, depth=total_lines_depth))
+    return (X,
+            X_chars,
+            tf.constant(line_number_one_hot),
+            tf.constant(total_lines_one_hot))
+
+
+def print_prediction(text, model, class_names):
+    """
+    Print prediction for the Skimlit model
+    :param text:
+    :param model:
+    :param class_names:
+    :return:
+    """
+    y_pred = model.predict(x=prepare_data(text))
+    y_pred_label = tf.argmax(y_pred, axis=1)
+
+    pred_label = [class_names[idx] for idx in y_pred_label]
+    answer = []
+    for idx, sentence in enumerate(prepare_data(text)[0]):
+        answer.append(pred_label[idx] + " " + sentence)
+    return "\n\n".join(answer)
+
